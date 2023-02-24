@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from carts.views import _cart_id
+from carts.models import Cart, CartItem
 from .forms import RegistrationForm
 from .models import Account
 from django.template.loader import render_to_string
@@ -56,6 +58,17 @@ def login(request):
         password = request.POST['password']
         user = auth.authenticate(email=email, password=password)
         if user is not None:
+            try:
+                cart = Cart.objects.get(cart_id=_cart_id(request))
+                is_cart_item_exists = CartItem.objects.filter(cart=cart).exists()
+                if is_cart_item_exists:
+                    cart_item = CartItem.objects.filter(cart=cart)
+
+                    for item in cart_item:
+                        item.user = user
+                        user.save()
+            except:
+                pass
             auth.login(request, user)
             messages.success(request, 'Ви успішно ввійшли в акаунт')
             return redirect('dashboard')
