@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from store.models import Product, Variation
 from .models import Cart, CartItem
 from django.contrib.auth.decorators import login_required
+from orders.forms import OrderForm
 # Create your views here.
 
 
@@ -86,7 +87,8 @@ def remove_cart(request, product_id, cart_item_id):
     cart = Cart.objects.get(cart_id=_cart_id(request))
     product = get_object_or_404(Product, id=product_id)
 
-    cart_item = CartItem.objects.filter(product=product, cart=cart, id=cart_item_id)
+    cart_item = CartItem.objects.filter(product=product, cart=cart, id=cart_item_id).first()
+
     if cart_item.quantity > 1:
         cart_item.quantity -= 1
         cart_item.save()
@@ -134,6 +136,7 @@ def cart(request, total=0, quantity=0, cart_items=None):
 
 @login_required(login_url='login')
 def checkout(request, total=0, quantity=0, cart_items=None):
+
     tax = 0
     grand_total = 0
 
@@ -154,8 +157,7 @@ def checkout(request, total=0, quantity=0, cart_items=None):
         'quantity': quantity,
         'cart_items': cart_items,
         'grand_total': grand_total,
-        'tax': tax,
-
-
+        'tax': tax
     }
+
     return render(request, 'store/checkout.html', context)

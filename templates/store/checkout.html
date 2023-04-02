@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static %}
+
 {% block content %}
     <section class="section-content padding-y bg">
         <div class="container">
@@ -8,12 +8,15 @@
 
 
             <div class="row">
+
                 <aside class="col-lg-6">
+
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title mb-4">Billing Address</h4>
-                            <form action="" method="POST">
+                            <form action="{% url 'place_order' %}" method="post">
                                 {% csrf_token %}
+
                                 <div class="form-row">
                                     <div class="col form-group">
                                         <label for="">First Name</label>
@@ -64,11 +67,13 @@
                                         <textarea name="order_note" rows="2" class="form-control"></textarea>
                                     </div>
                                 </div>
-
+                                <button type="submit" name="button" class="btn btn-primary btn-block">Go</button>
+                            </form>
                         </div>
 
 
                     </div> <!-- card.// -->
+
                 </aside> <!-- col.// -->
                 <aside class="col-lg-6">
 
@@ -102,7 +107,7 @@
                                                 </figcaption>
                                             </figure>
                                         </td>
-                                        
+
                                         <td>
                                             <label for="">{{ cart_item.quantity }}</label>
                                         </td>
@@ -119,17 +124,19 @@
                                 </tbody>
                             </table>
 
-                        <button type="submit" name="button" class="btn btn-primary btn-block">Place Order</button>
+
                             <a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
                         </div> <!-- card-body.// -->
+
                     </div> <!-- card.// -->
-                </form>
+
                 </aside> <!-- col.// -->
+            </div>
+            </div>
 
+        </div> <!-- row.// -->
 
-            </div> <!-- row.// -->
-
-            <!-- ============================ COMPONENT 1 END .// ================================= -->
+        <!-- ============================ COMPONENT 1 END .// ================================= -->
 
         </div> <!-- container .//  -->
     </section>
